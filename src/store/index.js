@@ -12,8 +12,8 @@ export default new Vuex.Store({
   mutations: {
   },
   actions: {
-    getBooksInfo(){
-      axios.get('',)
+    getBooksInfo(name){
+      axios.get(`${name}`,)
     }
 
   },

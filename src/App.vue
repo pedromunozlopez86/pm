@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: "Buscalibros",
 
   data: () => ({
     //
