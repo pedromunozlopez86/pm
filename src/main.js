@@ -6,7 +6,9 @@ import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import firebase from 'firebase'
 import { initializeApp } from "firebase/app";
+import VueMeta from 'vue-meta'
 
+Vue.use(VueMeta)
 Vue.config.productionTip = false
 
 const firebaseConfig = {

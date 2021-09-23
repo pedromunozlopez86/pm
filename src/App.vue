@@ -54,5 +54,11 @@ export default {
       modalInfo: false,
     };
   },
+  metaInfo: {
+    // if no subcomponents specify a metaInfo.title, this title will be used
+    title: "Prueba para Simplex",
+    // all titles will be injected into this template
+    titleTemplate: "%s | Hecho por Pedro Muñoz L.",
+  },
 };
 </script>
