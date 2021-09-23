@@ -7,6 +7,8 @@
       </div>
 
       <v-spacer></v-spacer>
+
+      <!--Modal-Info-->
       <div class="text-center">
         <v-dialog v-model="modalInfo" width="500">
           <template v-slot:activator="{ on, attrs }">
@@ -39,9 +41,18 @@
       </div>
     </v-app-bar>
 
-    <v-main>
+    <v-main class="amber lighten-3" fluid>
       <router-view />
     </v-main>
+    <v-footer
+      app
+      padless
+      color="warning white--text d-flex justify-center pt-5"
+    >
+      <p class="font-weight-bold ">
+        Pedro Muñoz L. | Frontend VueJs
+      </p>
+    </v-footer>
   </v-app>
 </template>
 
@@ -54,11 +65,10 @@ export default {
       modalInfo: false,
     };
   },
-  metaInfo: {
-    // if no subcomponents specify a metaInfo.title, this title will be used
-    title: "Prueba para Simplex",
-    // all titles will be injected into this template
-    titleTemplate: "%s | Hecho por Pedro Muñoz L.",
-  },
+  metaInfo: [
+    { title: "Prueba para Simplex" },
+    { titleTemplate: "%s | Hecho por Pedro Muñoz L." },
+    { link: { rel: "favicon", href: "logo.png" } },
+  ],
 };
 </script>
