@@ -1,33 +1,37 @@
 <template>
   <v-container class="">
-    <div class="mt-15 d-flex-row justify-center">
-      <h1>Buscador de Libros</h1>
+    <h1 class="primary--text">Buscador de Libros</h1>
+    <div class="d-flex justify-center">
       <v-text-field
-        class="mt-4"
+        class="my-5"
         v-model="inputBook"
         dense
         color="warning"
         prepend-icon="mdi-magnify"
         label="Ingresa un nombre o titulo"
       ></v-text-field>
-      <v-btn @click="vamos(inputBook)" class="my-16"
+
+      <v-btn
+        @click="vamos(inputBook), (buscas = true)"
+        color="warning"
+        class="ml-10 mt-3 "
         >buscar <v-icon right dark small>mdi-magnify-scan</v-icon>
       </v-btn>
-
-      <v-spacer></v-spacer>
     </div>
+    <h3 class="mb-4 mt-0" v-if="buscas">Estas buscando...{{ inputBook }}</h3>
     <v-row>
       <v-col
-        v-for="({ cover_i, title, author_name, key } = libro, i) in dataBooks"
+        v-for="({ cover_i, title, author_name, key } = libro,
+        i) in visiblePages"
         :key="i"
         cols="2"
       >
         <v-card
           min-width="100px"
           max-width="200px"
-          max-height="250px"
-          min-height="249px"
-          class="my-3"
+          max-height="260px"
+          min-height="260px"
+          class="my-1"
         >
           <v-container class="pa-0">
             <v-img
@@ -35,19 +39,17 @@
               position="top center"
               v-if="cover_i"
               :src="`https://covers.openlibrary.org/b/ID/${cover_i}-M.jpg`"
-              max-height="15vh"
+              max-height="20vh"
+              min-height="20vh"
             ></v-img>
             <v-img
               v-else
               src="https://agencias.assist1.com.co/assets/images/no-image.png"
-              max-width="100vw"
-              height="130px"
+              max-height="20vh"
+              min-height="20vh"
             ></v-img>
 
             <h5 class="text-truncate pt-5 pl-3">{{ title }}</h5>
-            <div class="">
-              <h5></h5>
-            </div>
 
             <v-row justify="space-around">
               <v-col cols="auto">
@@ -62,7 +64,7 @@
                       height="1.3rem"
                       color="warning"
                       dense
-                      class="text-center mt-10"
+                      class="text-center mt-10 px-2"
                       v-bind="attrs"
                       v-on="on"
                       @click="modalOn(i, key)"
@@ -71,6 +73,7 @@
                       <v-icon right dark>mdi-information</v-icon></v-btn
                     >
                   </template>
+
                   <template v-slot:default="dialog">
                     <v-card>
                       <v-toolbar color="warning" dark>
@@ -79,6 +82,7 @@
                       <v-card-text>
                         <div class="my-5">
                           <v-img
+                            contain
                             v-if="cover_i"
                             width="80vw"
                             height="50vh"
@@ -91,22 +95,24 @@
                             contain
                             v-else
                             src="https://agencias.assist1.com.co/assets/images/no-image.png"
-                            height="100%"
                           ></v-img>
-                          <p class="pt-15">Title: {{ infoBook.title }}</p>
+                          <p class="pt-10">Title: {{ infoBook.title }}</p>
                           <p>Author(s):{{ author_name.join(" - ") }}</p>
 
                           <div v-if="infoBook.description">
                             <p
+                              class="font-weight-bold"
                               v-if="infoBook.description"
-                              v-text="infoBook.description.value"
-                            ></p>
+                            >
+                              {{ infoBook.description.value }}
+                            </p>
                             <p v-else>{{ infoBook.description }}</p>
                           </div>
+
                           <div v-else>Descripción No disponible</div>
                         </div>
                       </v-card-text>
-                      <v-card-actions class="justify-end">
+                      <v-card-actions class="align-end">
                         <v-btn
                           color="secondary"
                           text
@@ -123,6 +129,14 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <v-pagination
+      class="mt-16"
+      v-model="page"
+      circle
+      color="warning"
+      :length="Math.ceil(dataBooks.length / perPage)"
+    ></v-pagination>
   </v-container>
 </template>
 
@@ -135,10 +149,20 @@ export default {
       dataBooks: [],
       inputBook: "",
       urlImg: "",
-      id: 0,
-      autores: ["hola", "dos", "tres"],
       infoBook: {},
+      page: 1,
+      perPage: 12,
+      buscas: false,
     };
+  },
+
+  computed: {
+    visiblePages() {
+      return this.dataBooks.slice(
+        (this.page - 1) * this.perPage,
+        this.page * this.perPage
+      );
+    },
   },
 
   methods: {
@@ -165,6 +189,5 @@ export default {
       return this.modalOn();
     },
   },
-  computed: {},
 };
 </script>
